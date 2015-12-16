@@ -1,0 +1,19 @@
+{
+  "name": "reactpro",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "webpack"
+  },
+  "dependencies": {
+    "babel": "5.8.21",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3"
+  },
+  "devDependencies": {
+    "babel-core": "~5.8.33",
+    "babel-loader": "~5.3.3",
+    "babel-plugin-react-transform": "~1.1.1",
+    "clean-webpack-plugin": "^0.1.4",
+    "webpack": "^1.12.6"
+  }
+}
