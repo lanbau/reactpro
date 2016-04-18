@@ -72,6 +72,10 @@
 
 	var _componentsSearchBox2 = _interopRequireDefault(_componentsSearchBox);
 
+	var _componentsProductResult = __webpack_require__(160);
+
+	var _componentsProductResult2 = _interopRequireDefault(_componentsProductResult);
+
 	// SearchBox Component, does not run until you call it
 
 	var App = (function (_Component) {
@@ -82,7 +86,8 @@
 
 	    _get(Object.getPrototypeOf(App.prototype), 'constructor', this).call(this, props);
 	    this.state = {
-	      searchingFor: ''
+	      searchingFor: '',
+	      searchResult: []
 	    };
 	  }
 
@@ -100,18 +105,38 @@
 	          'Grocery Initial Scroll'
 	        ),
 	        _react2['default'].createElement(_componentsSearchBox2['default'], { whenUserTypes: this.whenUserTypes.bind(this) }),
-	        this.getSearchingForDom()
+	        this.getSearchingForDom(),
+	        _react2['default'].createElement(_componentsProductResult2['default'], { productResult: this.state.searchResult })
 	      );
 	    }
+
+	    // Because this frequently changes when you change the scope
+	    // by calling a new function,
+	    // you can't access the original value by using it.
+	    // Aliasing it to that allows you still to access the original value of this.
 	  }, {
 	    key: 'whenUserTypes',
 	    value: function whenUserTypes(e) {
 	      var query = e.target.value;
+	      // initial state
+	      var that = this;
 
 	      this.setState({
 	        searchingFor: query
 	      });
+
+	      fetch('https://api.redmart.com/v1.5.6/catalog/search?q=' + query + '&pageSize=1&sort=1').then(function (response) {
+	        return response.json();
+	      }).then(function (data) {
+	        that.setState({
+	          // if there is match set it empty string
+	          searchingFor: '',
+	          searchResult: data.products
+	        });
+	      });
 	    }
+
+	    // as you type text appears below
 	  }, {
 	    key: 'getSearchingForDom',
 	    value: function getSearchingForDom() {
@@ -19776,6 +19801,67 @@
 	})(_react.Component);
 
 	exports['default'] = SearchBox;
+	module.exports = exports['default'];
+
+/***/ },
+/* 160 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var ProductResult = (function (_Component) {
+	  _inherits(ProductResult, _Component);
+
+	  function ProductResult() {
+	    _classCallCheck(this, ProductResult);
+
+	    _get(Object.getPrototypeOf(ProductResult.prototype), 'constructor', this).apply(this, arguments);
+	  }
+
+	  _createClass(ProductResult, [{
+	    key: 'render',
+	    value: function render() {
+	      var productResult = this.props.productResult;
+
+	      console.log(productResult);
+	      var productListDOM = productResult.map(function (product) {
+	        return _react2['default'].createElement(
+	          'div',
+	          null,
+	          product.title
+	        );
+	      });
+
+	      return _react2['default'].createElement(
+	        'div',
+	        { className: 'productResult' },
+	        productListDOM
+	      );
+	    }
+	  }]);
+
+	  return ProductResult;
+	})(_react.Component);
+
+	exports['default'] = ProductResult;
 	module.exports = exports['default'];
 
 /***/ }

@@ -1,7 +1,7 @@
-var Clean = require('clean-webpack-plugin');
-var webpack = require('webpack');
-var path = require('path');
-var assetsPath = path.resolve(__dirname, './dist');
+var Clean = require('clean-webpack-plugin')
+var webpack = require('webpack')
+var path = require('path')
+var assetsPath = path.resolve(__dirname, './dist')
 
 module.exports = {
   entry: './app.js',
